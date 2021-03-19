@@ -15,13 +15,27 @@ body {
 
   .page-controls {
     display: flex;
+    flex-wrap: wrap;
 
     input[type='text'] {
-      width: 300px;
+      flex: 1;
+      margin-bottom: 10px;
     }
 
     .buttons {
       margin-left: 15px;
+    }
+
+    @media screen and (max-width: 621px) {
+      .buttons {
+        margin-left: 0;
+      }
+    }
+
+    @media screen and (min-width: 621px) {
+      input[type='text'] {
+        width: 300px;
+      }
     }
   }
 

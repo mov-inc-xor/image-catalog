@@ -1,9 +1,9 @@
 import {useState} from "react";
 
 type Image = {
-  id: string,
+  ids: string[],
   srcs: string[],
-  tag: string,
+  tags: string[],
   complex: boolean,
 }
 
@@ -17,10 +17,12 @@ const useGiphy = (api_key: string) => {
     const NOT_FOUND = 'По тегу ничего не найдено';
 
     return new Promise((resolve, reject) => {
-      const promises = tags.map(tag => fetch(url(tag)));
+      const promises = tags.map(tag => fetch(url(tag))
+        .then(response => response.json())
+        .then(json => ({tag, ...json})));
 
       Promise.all(promises)
-        .then(responses => Promise.all(responses.map(response => response.json())))
+        // .then(responses => Promise.all(responses.map(response => response.json())))
         .then(jsons => jsons.filter(json => json.data.image_url))
         .then(jsons => {
           if (jsons.length !== promises.length) {
@@ -29,9 +31,9 @@ const useGiphy = (api_key: string) => {
           return jsons;
         })
         .then(jsons => ({
-          id: jsons.reduce((acc, json) => acc + json.data.id, ''),
-          srcs: jsons.reduce((acc, json) => [...acc, json.data.image_url], []),
-          tag: tags.map(tag => tag.trim().toLowerCase()).join(', '),
+          ids: jsons.map(json => json.data.id),
+          srcs: jsons.map(json => json.data.image_url),
+          tags: jsons.map(json => json.tag),
           complex: tags.length > 1,
         }))
         .then(img => {
@@ -52,12 +54,21 @@ const useGiphy = (api_key: string) => {
 
   const group = () => {
     const map = new Map();
-    for (const image of images) {
-      if (!map.get(image.tag)) {
-        map.set(image.tag, []);
-      }
-      map.set(image.tag, [...map.get(image.tag), image]);
-    }
+
+    images.forEach(image => (
+      image.tags.forEach((tag, i) => {
+          const ids = [image.ids[i]];
+          const srcs = [image.srcs[i]];
+          const tags = [image.tags[i]];
+
+          const replaced = {...image, ids, srcs, tags};
+
+          map.get(tag) ?
+            map.set(tag, [...map.get(tag), replaced]) :
+            map.set(tag, [replaced]);
+        }
+      )));
+
     return Array.from(map.entries());
   };
 

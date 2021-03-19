@@ -12,6 +12,8 @@ export const StyledButton = styled.button<ButtonProps>`
   font-size: 14px;
   font-weight: 500;
   transition: 0.1s;
+  margin-right: 5px;
+  margin-bottom: 5px;
 
   ${props => !props.disabled && css`
     &:hover {

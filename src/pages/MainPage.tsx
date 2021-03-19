@@ -5,7 +5,7 @@ import useGiphy from "../hooks/useGiphy";
 import TextField from "../components/TextField/TextField";
 import Button from "../components/Button/Button";
 import ButtonSwitcher from "../components/ButtonSwitcher/ButtonSwitcher";
-import Image from "../components/Image/Image";
+import ComplexImage from "../components/ComplexImage/ComplexImage";
 import useTextFieldWithFilter from "../hooks/useTextFieldWithFilter";
 
 function MainPage() {
@@ -33,12 +33,12 @@ function MainPage() {
         alert(reason);
         setLoading(false);
       });
-    }
+    };
 
     const timer = setTimeout(delay, 5000);
 
     return () => clearTimeout(timer);
-  }, [giphy, textFieldWithFilter])
+  }, [giphy, textFieldWithFilter]);
 
   const load = () => {
     if (!textFieldWithFilter.value) {
@@ -85,15 +85,25 @@ function MainPage() {
           <div key={group_index} className='group'>
             <h4>{tag}</h4>
             <div className='group-container'>
-              {images.map((image: any) => (
-                <Image onClick={() => onImageClick(image.tag)} onLoad={() => setLoading(false)} key={image.id}
-                       srcs={image.srcs}/>
+              {images.map((image: any, i: number) => (
+                <ComplexImage
+                  ids={image.ids}
+                  showTag={onImageClick}
+                  onLoad={() => setLoading(false)}
+                  key={image.ids.reduce((acc: string, id: string) => acc + id, '')}
+                  srcs={image.srcs}
+                  tags={image.tags}/>
               ))}
             </div>
           </div>
         )) : giphy.images.map(image => (
-          <Image onClick={() => onImageClick(image.tag)} onLoad={() => setLoading(false)} key={image.id}
-                 srcs={image.srcs}/>
+          <ComplexImage
+            ids={image.ids}
+            showTag={onImageClick}
+            onLoad={() => setLoading(false)}
+            key={image.ids.reduce((acc: string, id: string) => acc + id, '')}
+            srcs={image.srcs}
+            tags={image.tags}/>
         ))}
       </div>
     </div>
