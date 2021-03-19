@@ -2,13 +2,12 @@ import React from "react";
 import {ButtonProps} from './Button.d'
 import {StyledButton} from "./Button.styled";
 
-
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
+function Button(props: ButtonProps) {
   return (
-    <StyledButton {...props} ref={ref}>
+    <StyledButton {...props}>
       {props.children}
     </StyledButton>
   );
-});
+}
 
 export default Button;

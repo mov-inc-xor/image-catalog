@@ -1,17 +1,8 @@
 import React from 'react';
-import Button from "./components/Button/Button";
-import ButtonSwitcher from "./components/ButtonSwitcher/ButtonSwitcher";
-import TextField from "./components/TextField/TextField";
+import MainPage from "./pages/MainPage";
 
 function App() {
-  return (
-    <div>
-      <TextField filter={(text) => text.toUpperCase()} />
-      <Button primary onClick={() => alert('hello')}>Загрузить</Button>
-      <Button secondary>Очистить</Button>
-      <ButtonSwitcher on={'Разгруппировать'} off={'Группировать'} onSwitch={() => alert('Ок')} />
-    </div>
-  );
+  return <MainPage />
 }
 
 export default App;

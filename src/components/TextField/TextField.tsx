@@ -1,18 +1,11 @@
-import React, {useState} from "react";
+import React, {InputHTMLAttributes} from "react";
 import {StyledTextField} from "./TextField.styled";
-import {TextFieldProps} from './TextField.d';
 
-function TextField(props: TextFieldProps) {
-  const {filter, type, ...other} = props;
-
-  const [text, setText] = useState('');
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setText(filter ? filter(e.target.value) : e.target.value);
-  };
+function TextField(props: InputHTMLAttributes<HTMLInputElement>) {
+  const {type, ...other} = props;
 
   return (
-    <StyledTextField {...other} value={text} onChange={onChange}/>
+    <StyledTextField {...other} />
   );
 }
 
